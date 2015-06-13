@@ -1,0 +1,26 @@
+{
+  "name": "SBEOP",
+  "version": "0.2.0",
+  "description": "SBEOP web app",
+  "main": "index.js",
+  "engines" : { 
+      "node" : "0.10.31",
+      "npm" : ">=1.4"
+  },
+  "repository": "https://github.com/mongolab/hello-mongoose.git",
+  "authors": [ "Ben Wen", "Chris Chang" ],
+  "license": "MIT",
+  "dependencies": {
+    "mongoose": "3.8.15",
+    "underscore": "1.7.0",
+    "backbone": "1.1.2",
+    "express": "4.10.2",
+    "body-parser": "~1.0.0",
+    "cors" : "2.5.2"
+  },
+  "changelog" : [{"0.0.0": "Initial release"},
+		 {"0.1.0": "Update to Mongoose 3.5.7; new MongoClient semantics"},
+                 {"0.2.0": "Update to Mongoose 3.8.15; updated Node engine to 0.10.31; updated npm engine to >=1.4"}],
+  "homepage" : "http://SBEOP.herokuapp.com"
+}
+

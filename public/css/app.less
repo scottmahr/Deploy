@@ -1,0 +1,101 @@
+
+
+@orange: #ff8e00;
+@brown: #bd964f;
+@blue: #45425a;
+@green: #5fad41;
+@red: #ea2b1f;
+
+
+
+
+body {
+
+  background: url('img/background.jpg') no-repeat center center;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  /* position: fixed; */
+  width: 100%;
+  margin: 0;
+  height: 780px;
+  z-index: -1;
+
+      font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-weight: 500;
+    line-height: 1.1;
+    color: white;
+
+overflow: hidden;
+}
+
+h2{
+  font-family: Calibri,Candara,Segoe,Segoe UI,Optima,Arial,sans-serif; 
+
+}
+
+
+
+
+
+.logo{
+  float: left;
+  height:7vh; 
+  margin:1vh;
+
+}
+
+.headtxt{
+    float: left;
+
+      font-size: 5vh;
+  padding-top: 2vh;
+  padding-left:1vh;
+
+
+
+    &.orange{
+        color: rgb(255,142,0);
+
+    }
+
+}
+
+.court{
+    padding-top: 0;
+    width:100%;
+
+    overflow: hidden;
+}
+
+.buttons{
+    position: absolute;
+    bottom:2vh;left:0;right:0;
+
+
+}
+
+
+.button{
+    display: inline-block;
+        text-align: center ;
+    margin: 2vw;
+    padding: 5vw 0;
+    width: 28.5vw;
+    cursor: pointer;
+
+
+    &.green{
+        background-color: @green;
+    }
+    &.red{
+        background-color: @red;
+    }
+    &.blue{
+        background-color: @blue;
+    }
+    
+
+
+}

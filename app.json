@@ -1,0 +1,7 @@
+{
+  "name": "SwishMetrics",
+  "description": "The backend of the SwishMetrics web app",
+  "repository": "https://github.com/mongolab/hello-mongoose.git",
+  "keywords": ["node", "mongoose", "ODM"],
+  "addons": ["mongolab"]
+}

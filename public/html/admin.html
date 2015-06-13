@@ -1,0 +1,113 @@
+<span id="header-tagline">Not just answers. Thinking.</span>
+<img src="../img/logo_Semler_Brossy.png" alt="Semler Brossy Logo" width="230">
+<h1 align="center" class="welcome">ADMIN, {{g.selectedUser.name|uppercase}}</h1>
+
+<div class='headNav'>
+    <div ng-click="setSection(0)" ng-class='{selected:m.adminPage==0}'>USERS</div>
+    <div ng-click="setSection(2)" ng-class='{selected:m.adminPage==2}'>QUESTIONS</div>
+    <div ng-click="setSection(4)" ng-class='{selected:m.adminPage==4}'>EMAILS</div>
+    <div ng-click="setSection(3)" ng-class='{selected:m.adminPage==3}'>DATES</div>
+    <div ng-click="setSection(1)" ng-class='{selected:m.adminPage==1}'>REVIEWS</div>
+    <div ng-click="userPage()">USER PAGE</div>
+    <br>
+    <div ng-click="clearReviews()" ng-show='m.adminPage==1' style="background-color:red">DELETE ALL REVIEWS</div>
+    <div ng-click="emailAll('welcome')" ng-show='m.adminPage==0' style="background-color:blue">WELCOME EMAIL ALL</div>
+    <div ng-click="downloadAll()" ng-show='m.adminPage==1' style="background-color:blue">DOWNLOAD ALL</div>
+    <div ng-click="emailAll('remindProject')" ng-show='m.adminPage==1' style="background-color:blue">REMIND PROJECT LEADS</div>
+    <div ng-click="emailAll('remindCoach')" ng-show='m.adminPage==1' style="background-color:blue">REMIND COACHES</div>
+
+
+</div>
+
+
+<div class='adminMain' ng-show="m.adminPage==0">
+    <div style='margin-top:10px;'>
+        New User Name: <input type="text" ng-model="m.newUser.name">
+        Email: <input type="text" ng-model="m.newUser.email">
+        Admin: <input type="checkbox" ng-model="m.newUser.isAdmin">
+        Review Group: <select data-ng-options="o for o in g.reviewGroups" data-ng-model="m.newUser.reviewGroup"></select>
+        <div class="newUserBtn" ng-click="addUser()">Add User</div>
+    </div>
+    
+
+    <div class="userList2" ng-repeat="user in g.userList | orderBy : ['reviewGroup','name']">
+        <div class='userBox'>{{user.name}}</div>
+        <div class='userInput'>
+            Name: <input type="text" ng-model="user.name"><br>
+            Email:  <input type="text" size="35" ng-model="user.email"><br>
+            Admin: <input type="checkbox" ng-model="user.isAdmin">&nbsp;&nbsp;&nbsp;&nbsp;
+            Review Group: <select data-ng-options="o for o in g.reviewGroups" 
+                data-ng-model="user.reviewGroup" ng-change="saveUser(user)"></select><br>
+            <div class="myBtn"   ng-click="saveUser(user)">Save Changes</div>
+            <div class="myBtn"   ng-click="welcomeEmail(user)">Send Welcome Email</div>
+            <div class="myBtn"   ng-click="deleteUser(user)">Delete User</div>
+            <div class="myBtn"   ng-click="gotoUserPage(user)">User Page</div>
+        </div>
+        <div style="clear: both;"></div>
+    </div>
+</div>
+
+
+<div class="adminMain" ng-show="m.adminPage==1">
+    <div class="userList" ng-repeat="user in g.userList | orderBy : ['reviewGroup','name']">
+        <div class='userBox'>{{user.name}}</div>
+        <div class='userInput'>
+            <input type="text" ng-model="user.userInput">
+            <div class="myBtn addProjectBtn"   ng-click="addReviews(user,'project')">Add Project Manager(s)</div>
+            <div class="myBtn addCoacheeBtn"   ng-click="addReviews(user,'summary')">Add Coach</div>
+            <div class="myBtn downloadBtn"   ng-click="g.downloadPDF(user)">Download</div>
+        </div>
+        <div style="clear: both;"></div>
+        <div class="userReivews" ng-class="{project:review.type=='project',done:review.status=='completed'||review.status=='approved'}" 
+            ng-repeat="review in user.reviews | filter:{ revieweeID: user._id } | orderBy : 'type':true">
+            <b>Reviewer:</b> {{g.getUserName(review.reviewerID)}}<br>
+            <b>Type:</b> {{review.type}} <br>
+            <b>Status:</b> {{review.status}}
+            <span class="icon-x" ng-click="deleteReview(review.id,user)"></span>
+        </div>
+    </div>
+</div>
+
+<div class='adminMain' ng-show="m.adminPage==2">
+    Project Questions:<span class="icon-plus-1" ng-click="newQuestion('project')"></span><br>
+    <div ng-repeat="q in g.settings.gOptions.projectQuestions">
+        <label> #{{$index+1}}
+            <textarea class="questionInput" ng-model="q.question"></textarea>
+            <span class="icon-arrow-up" ng-click="moveQuestion('project',$index,-1)"></span>
+            <span class="icon-arrow-down" ng-click="moveQuestion('project',$index,1)"></span>
+            <span class="icon-delete-circle" ng-click="deleteQuestion('project',$index)"></span>
+        </label>
+        
+    </div>
+    Summary Questions: <span class="icon-plus-1" ng-click="newQuestion('summary')"></span><br>
+    <div  ng-repeat="q in g.settings.gOptions.summaryQuestions">
+        <label> #{{$index+1}}
+            <textarea class="questionInput" ng-model="q.question"></textarea>
+            <span class="icon-arrow-up" ng-click="moveQuestion('summary',$index,-1)"></span>
+            <span class="icon-arrow-down" ng-click="moveQuestion('summary',$index,1)"></span>
+            <span class="icon-delete-circle" ng-click="deleteQuestion('summary',$index)"></span>
+        </label>
+    </div>
+    <div class="saveBtn" ng-click='saveSettings(true)' style="width:200px">Save Questions</div>
+</div>
+
+<div class='adminMain' ng-show="m.adminPage==3">
+    Project Dates:<br>
+    <div ng-repeat="dt in g.settings.gOptions.dates">
+        <label> {{dt[0]}}
+            <input type="text" ng-model="dt[1]"/>
+        </label>
+    </div>
+    
+    <div class="saveBtn" ng-click='saveSettings(true)' style="width:200px">Save Dates</div>
+</div>
+
+<div class='adminMain' ng-show="m.adminPage==4">
+    <div ng-repeat="email in g.settings.gOptions.emails">
+        <label> {{email[0]}}</label>
+        <div text-angular="text-angular"  ng-model="email[1]"></div>
+        <div class="saveBtn" ng-click='testEmail($index)' style="width:100px">Test Email</div>
+        <br><br>
+    </div>
+    <div class="saveBtn" ng-click='saveSettings(true)' style="width:200px">Save Emails</div>
+</div>

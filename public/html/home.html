@@ -1,21 +1,26 @@
-<img src="../css/img/logo.png" class="logo">
+<div class="header">
+    <span class="icon-broadcast headerIcon"></span>
+    <span class="headtxt orange">DEPLOY</span>
 
+</div>
 
-<span class="headtxt orange">SWISH</span>
-<span class="headtxt white">METRICS</span>
-<br>
+<div deploymap class='currentUser'></div>
 
-    <div shotchart  class="court"></div>
-
-
-
+<div class="userList">
+    <div class="users" ng-repeat="(mac, device) in d.devices">
+        <span class="userTxt">{{device.name|tc}}</span>
+        <span class="userTime">( {{device.rssi}}:{{device.count}} )</span> <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="userMac">{{mac}}</span>
+    </div>
+</div>
 
 
 <div class='buttons'>
-    <div class="button green" ng-click='shoot()'>SHOOT!</div>
-    <div class="button blue" ng-click='auto()'>AUTO</div>
-    <div class="button red" ng-click='clear()'>CLEAR</div>
+    <div class="button orange" ng-click='ping()'>PING</div>
+    <div class="button blue" ng-click='changeEvent()'>CHANGE EVENT</div>
+    <div class="button green" ng-click='clearEvent()'>CLEAR</div>
 </div>
+
 
 
 

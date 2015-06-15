@@ -1,21 +1,28 @@
 
+/*
+@blue: #247BA0;
+@green: #70C1B3;
+@ltgreen: #B2DBBF;
+@tan: #F3FFBD;
+@red: #FF1654;
+*/
 
-@orange: #ff8e00;
-@brown: #bd964f;
-@blue: #45425a;
-@green: #5fad41;
-@red: #ea2b1f;
+//other colots
+@navy: #011627;
+@white: #fdfffc;
+@blue: #2ec4b6;
+@red: #e71d36;
+@orange: #ff9f1c;
+@tan: #D0CD94;
+@green: #78BC61;
 
 
 
 
 body {
 
-  background: url('img/background.jpg') no-repeat center center;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
+  background-color: @tan; 
+ 
   /* position: fixed; */
   width: 100%;
   margin: 0;
@@ -38,64 +45,117 @@ h2{
 
 
 
+.header{
+    position: absolute;
+    top:0vh;left:0;right:0;
+    height:10vh;
+    background-color: @navy;
+    >.headerIcon{
+        float: left;
+        padding-top: 1vh;
+        padding-left:2vh;
+        padding-right:5vh;
 
-.logo{
-  float: left;
-  height:7vh; 
-  margin:1vh;
-
-}
-
-.headtxt{
-    float: left;
-
-      font-size: 5vh;
-  padding-top: 2vh;
-  padding-left:1vh;
-
-
-
-    &.orange{
-        color: rgb(255,142,0);
-
+        font-size: 8vh;
+        color: @orange;
     }
-
+    >.headtxt{
+        float: left;
+        font-size: 8vh;
+        padding-top: 1vh;
+        color: white;
+        &.orange{
+            color: @orange;
+        }
+    }
 }
 
-.court{
-    padding-top: 0;
-    width:100%;
 
-    overflow: hidden;
+.currentUser{ 
+    position: absolute;
+    top:10vh;left:0;right:0;
+    height:40vh;
+    text-align: center;
+    >.cUserName{ 
+        font-size: 10vh;
+        color: @navy;
+    }
+    >.cUserHeight{ 
+        font-size: 5vh;
+        color: @blue;
+    }
+    >.bigIcon{
+        font-size: 30vh;
+        color: @green;
+        &.red{
+            color: @red;
+        }
+    }
 }
+
+.userList{ 
+    position: absolute;
+    top:50vh;left:0;right:0;
+    height:35vh;
+    text-align: left;
+    >.users{
+        >.smallIcon{
+            font-size: 8vh;
+            color: @green;
+            &.red{
+                color: @red;
+            }
+        }
+        >.userTxt{
+          font-size: 4vh;
+          color: @navy;
+        }
+
+        >.userTime{
+            font-size: 4vh;
+            color: @green;
+        }
+        >.userMac{
+            font-size: 2vh;
+            color: @orange;
+        }
+    }
+}
+
+
 
 .buttons{
     position: absolute;
     bottom:2vh;left:0;right:0;
-
-
-}
-
-
-.button{
-    display: inline-block;
+    >.button{
+        display: inline-block;
         text-align: center ;
-    margin: 2vw;
-    padding: 5vw 0;
-    width: 28.5vw;
-    cursor: pointer;
-
-
-    &.green{
-        background-color: @green;
+        margin: 1vw;
+        padding: 3vw 0;
+        width: 28.5vw;
+        cursor: pointer;
+        &.orange{
+            background-color: @orange;
+        }
+        &.green{
+            background-color: @green;
+        }
+        &.red{
+            background-color: @red;
+        }
+        &.blue{
+            background-color: @blue;
+            width:32vw;
+        }
     }
-    &.red{
-        background-color: @red;
-    }
-    &.blue{
-        background-color: @blue;
-    }
-    
+}
 
+.mac{
+    position: absolute;
+    bottom:0;left:2vw;right:0;
+    font-size: 2vh;
+    color: @navy;
 
 }
+
+

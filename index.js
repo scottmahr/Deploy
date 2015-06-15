@@ -51,8 +51,8 @@ var userSchema = new mongoose.Schema({
     cDate: { type: Date, default: Date.now },   //date item was created
     name: {type: String, lowercase: true, trim: true,required:true,unique:true},                    
     status: { type: String, default: "free" },    //free, busy, onTask    
-    eventID: {type:mongoose.Schema.Types.ObjectId}, //the ID of the current event             
-    positions: { type: mongoose.Schema.Types.Mixed, default: [] },    //[time,x,y] , store 1000 of them
+    color: { type: String, default: "#ff9f1c" },           
+    positions: { type: mongoose.Schema.Types.Mixed, default: {} },    //[eventid,x,y] , store 1000 of them
 }, { versionKey: false });
 
 var eventSchema = new mongoose.Schema({
@@ -151,6 +151,26 @@ router.route('/users/:user_id')
 
         });
     })
+        //delete user
+    .delete(function(req, res) {
+        //first, get the user and see if it has any reviews
+        Users.findById(req.params.user_id, function(err, user) {
+            if (err){
+                res.json({ error: 'error getting user: ' +err });
+            }else{
+                Users.remove( {_id: user._id}, 
+                    function(err) {
+                        if (err){
+                            res.json({ error: 'error removing lift: ' +err });
+                        }else{
+                            res.json({ sucess: 'removed user' });
+                        }
+                    }
+                );
+                
+            }
+        });
+    })
 
 
 // on routes that end in /reviews
@@ -202,6 +222,26 @@ router.route('/events/:event_id')
                 }
             });
 
+        });
+    })
+        //delete event
+    .delete(function(req, res) {
+        //first, get the event and see if it has any reviews
+        Events.findById(req.params.event_id, function(err, event) {
+            if (err){
+                res.json({ error: 'error getting event: ' +err });
+            }else{
+                Events.remove( {_id: event._id}, 
+                    function(err) {
+                        if (err){
+                            res.json({ error: 'error removing lift: ' +err });
+                        }else{
+                            res.json({ sucess: 'removed event' });
+                        }
+                    }
+                );
+                
+            }
         });
     })
 

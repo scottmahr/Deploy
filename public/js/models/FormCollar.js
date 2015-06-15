@@ -43,7 +43,7 @@ app.service('FormCollar', function($q,$timeout, Globals) {
                         devices[device.address] = {'name':device.name,'rssiTotal':Math.pow(10,device.rssi/10),'count':1};
                     }else{
                         //we do have it, average stuff
-                        devices[device.address].rssiTotal += device.rssi;
+                        devices[device.address].rssiTotal += Math.pow(10,device.rssi/10);
                         devices[device.address].count += 1;
                     }
                 }
@@ -51,7 +51,7 @@ app.service('FormCollar', function($q,$timeout, Globals) {
                     evothings.easyble.stopScan();
                     //get the average rssi values
                     _.each(_.keys(devices),function(k){
-                        devices[k].rssi = parseInt(devices[k].rssiTotal/devices[k].count)
+                        devices[k].rssi = parseInt(10*Math.log10(devices[k].rssiTotal/devices[k].count))
                     })
                     deferred.resolve(devices);
                    

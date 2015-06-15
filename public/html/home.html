@@ -1,16 +1,31 @@
 <div class="header">
     <span class="icon-broadcast headerIcon"></span>
     <span class="headtxt orange">DEPLOY</span>
+    <span class="headtxt small">{{m.userList[m.cUserIdx].name|uppercase}}</span>
 
 </div>
 
 <div deploymap class='currentUser'></div>
 
+
+
 <div class="userList">
+    <div class="users" ng-repeat="user in m.userList">
+        <span class="icon-broadcast smallIcon" style="color:{{user.color}}"></span>
+        <span class="userTxt">{{user.name|tc}}</span>
+        <span class="userTime" ng-show="(m.cTime-user.lastDataTime)/1000<300" ng-class="{orange:(m.cTime-user.lastDataTime)/1000>10,red:(m.cTime-user.lastDataTime)/1000>30}">
+            ({{(m.cTime-user.lastDataTime)/1000|int}}s)
+        </span>
+        <span class="userTime red" ng-show="(m.cTime-user.lastDataTime)/1000>300">(na)</span>
+    </div>
+</div>
+
+
+<div class="beaconList">
     <div class="users" ng-repeat="(mac, device) in d.devices">
         <span class="userTxt">{{device.name|tc}}</span>
-        <span class="userTime">( {{device.rssi}}:{{device.count}} )</span> <br>
-        &nbsp;&nbsp;&nbsp;&nbsp;<span class="userMac">{{mac}}</span>
+        <span class="userTime">( {{device.rssi}}:{{device.count}} )</span>
+        <span class="userMac">{{mac}}</span>
     </div>
 </div>
 
@@ -18,6 +33,8 @@
 <div class='buttons'>
     <div class="button orange" ng-click='ping()'>PING</div>
     <div class="button blue" ng-click='changeEvent()'>CHANGE EVENT</div>
+    <div class="button blue" ng-click='changeUser()'>CHANGE USER</div>
+
     <div class="button green" ng-click='clearEvent()'>CLEAR</div>
 </div>
 

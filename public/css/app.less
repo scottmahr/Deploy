@@ -26,7 +26,7 @@ body {
   /* position: fixed; */
   width: 100%;
   margin: 0;
-  height: 780px;
+  height: 100%;
   z-index: -1;
 
       font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
@@ -54,18 +54,23 @@ h2{
         float: left;
         padding-top: 1vh;
         padding-left:2vh;
-        padding-right:5vh;
+        padding-right:2vh;
 
         font-size: 8vh;
         color: @orange;
     }
     >.headtxt{
         float: left;
-        font-size: 8vh;
-        padding-top: 1vh;
+        font-size: 6vh;
+        padding-top: 2vh;
         color: white;
         &.orange{
             color: @orange;
+        }
+        &.small{
+            font-size: 4vh;
+            padding-top: 3.5vh;
+            padding-left: 2vh;
         }
     }
 }
@@ -95,16 +100,12 @@ h2{
 
 .userList{ 
     position: absolute;
-    top:50vh;left:0;right:0;
-    height:35vh;
+    top:50vh;left:5vw;right:0;
+    height:15vh;
     text-align: left;
     >.users{
         >.smallIcon{
-            font-size: 8vh;
-            color: @green;
-            &.red{
-                color: @red;
-            }
+            font-size: 4vh;
         }
         >.userTxt{
           font-size: 4vh;
@@ -122,6 +123,27 @@ h2{
     }
 }
 
+.beaconList{ 
+    position: absolute;
+    top:69vh;left:5vw;right:0;
+    height:30vh;
+    text-align: left;
+    >.users{
+        >.userTxt{
+          font-size: 2vh;
+          color: @navy;
+        }
+
+        >.userTime{
+            font-size: 2vh;
+            color: @green;
+        }
+        >.userMac{
+            font-size: 2vh;
+            color: @orange;
+        }
+    }
+}
 
 
 .buttons{
@@ -131,8 +153,7 @@ h2{
         display: inline-block;
         text-align: center ;
         margin: 1vw;
-        padding: 3vw 0;
-        width: 28.5vw;
+        padding: 3vw 3vw;
         cursor: pointer;
         &.orange{
             background-color: @orange;
@@ -145,7 +166,6 @@ h2{
         }
         &.blue{
             background-color: @blue;
-            width:32vw;
         }
     }
 }

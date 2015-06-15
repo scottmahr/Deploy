@@ -3,11 +3,7 @@ var app = angular.module("deploy");
 app.controller('HomeCtrl', function ($scope,$interval,$timeout,$location,Restangular,BTLE,BTData,FormCollar) {
 
     $scope.m = {
-        userList:[
-            {name:"Scott",icon:"oldman",standingIcon:"oldman",lastTime:'40'},
-            {name:"Jacob",icon:"oldman",standingIcon:"oldman",lastTime:'15'},
-            {name:"Sally",icon:"woman",standingIcon:"woman",lastTime:'5'},
-            ],
+        userList:[],
         cUserIdx: 0,
         mapData : {walls:[
                 [[0,0],[0,4.34],[8.21,0],[4.85,0],[0,-3.22],[-4.85,0],[0,3.22]],
@@ -53,7 +49,7 @@ app.controller('HomeCtrl', function ($scope,$interval,$timeout,$location,Restang
         
         $scope.userList = $scope.usersBase.getList();
         $scope.userList.then(function(usersResult) {
-            console.log("got data")
+            console.log("got data",usersResult)
             $scope.m.userList = usersResult;
             //$scope.$broadcast('update', {} );
             //console.log($scope.m.usersEnt)
@@ -109,12 +105,16 @@ app.controller('HomeCtrl', function ($scope,$interval,$timeout,$location,Restang
         
     }
 
+    $scope.changeUser = function(){
+        $scope.m.cUserIdx = ($scope.m.cUserIdx+1)%$scope.m.userList.length;
+    }
+
     $scope.save = function(){
         $scope.m.usersEnt.put().then(function(){console.log('saved')});
     }
 
 
-    //$scope.loadData();
+    $scope.loadData();
 
     $scope.$on('newPosition', function (event, data) {
         if(data.fallen){

@@ -52,13 +52,14 @@ var userSchema = new mongoose.Schema({
     name: {type: String, lowercase: true, trim: true,required:true,unique:true},                    
     status: { type: String, default: "free" },    //free, busy, onTask    
     color: { type: String, default: "#ff9f1c" },           
-    positions: { type: mongoose.Schema.Types.Mixed, default: {} },    //[eventid,x,y] , store 1000 of them
+    positions: { type: mongoose.Schema.Types.Mixed, default: {} },    //[eventid,ctime,x,y] , store 1000 of them
 }, { versionKey: false });
 
 var eventSchema = new mongoose.Schema({
     cDate: { type: Date, default: Date.now },   //date item was created
     name: { type: String, lowercase: true, trim: true,required:true,unique:true},   //name of event
     mapData: { type: mongoose.Schema.Types.Mixed , default: {} },  //will include walls, other things
+    calibData: { type: mongoose.Schema.Types.Mixed , default: [] }, //{x,y,readings:[mac,rssi]}
     beaconData: { type: mongoose.Schema.Types.Mixed , default: [] }, //list of all beacons at event [uuid,x,y,description]
     taskData: { type: mongoose.Schema.Types.Mixed , default: [] },  //list of all tasks at event [type,x,y] things like trash, other things shown on map
 }, { versionKey: false });

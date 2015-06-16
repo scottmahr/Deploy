@@ -9,6 +9,7 @@ app.controller('HomeCtrl', function ($scope,$interval,$timeout,$location,Restang
         cEventIdx:0,
         cTime:0,
         addIcon:'',
+        pingOn: false,
     };
     $scope.d = BTData;
     $scope.usersBase = Restangular.all('users');
@@ -98,6 +99,15 @@ app.controller('HomeCtrl', function ($scope,$interval,$timeout,$location,Restang
         
     }
 
+    $scope.startPing = function(){
+        if($scope.m.pingOn){
+            $scope.m.pingOn= false;
+        }else{
+            $scope.m.pingOn=true;
+        }
+        
+    }
+
     $scope.ping = function(){
        if(window.cordova == undefined){
            return;
@@ -155,7 +165,9 @@ app.controller('HomeCtrl', function ($scope,$interval,$timeout,$location,Restang
 
 
     $scope.changeEvent = function(){
-        $scope.m.cEventIdx = ($scope.m.cEventIdx+1)%$scope.m.cEventIdx.length;
+        $scope.m.cEventIdx = ($scope.m.cEventIdx+1)%$scope.m.eventList.length;
+        $scope.$broadcast('update', {} );
+        //console.log($scope.m.eventList[$scope.m.cEventIdx])
     }
     $scope.changeUser = function(){
         $scope.m.cUserIdx = ($scope.m.cUserIdx+1)%$scope.m.userList.length;
@@ -190,12 +202,12 @@ app.controller('HomeCtrl', function ($scope,$interval,$timeout,$location,Restang
         
         //console.log($scope.m.userList[0].lastTime)
 
-   }, 500);
+   }, 1000);
 
     this.heartBeat2 = $interval(function() {
         $scope.loadData();
-        $scope.ping();
-    }, 3000);
+        if($scope.m.pingOn){$scope.ping();}
+    }, 2500);
 
 
 });

@@ -13,13 +13,9 @@ app.directive('deploymap',  function($window) {
         var w = 100*vw;
         var h = 40*vh;
 
-        var xScale = d3.scale.linear()
-                .domain([0,20])
-                .range([.05*w,.95*w]);
+        var xScale;
 
-        var yScale = d3.scale.linear()
-                .domain([-1.8,4.34])
-                .range([.05*h,.95*h]);
+        var yScale; 
 
 
 
@@ -31,24 +27,14 @@ app.directive('deploymap',  function($window) {
            .append("g");
            
 
-        var rectangle = svg.append("rect")
-            .attr("x", 0)
-            .attr("y", 0)
-            .attr("width", w)
-            .attr("height", h)
-            .attr("fill","#D0CD94")
-            .on('click', function(d,i){
-                //check to see if anything happened then
-              var pos = d3.mouse(this);
-              var loc = [xScale.invert(pos[0]),yScale.invert(pos[1])];
-              scope.calibPoint(loc)
-            });
+        
 
 
 
         scope.makePath = function(pathInfo) {
             var txt = '';
             var pos = [0,0];
+
             _.each(pathInfo,function(pt,idx){
                 //console.log(pt)
                 //console.log(parseInt(xScale(pt[0])),parseInt(yScale(pt[1])))
@@ -74,6 +60,44 @@ app.directive('deploymap',  function($window) {
         scope.update = function(){
             if(scope.m.eventList[scope.m.cEventIdx]==undefined){return;}
             var event = scope.m.eventList[scope.m.cEventIdx];
+
+            var absPos = _.map(event.mapData.walls,function(wall){
+                var pos;
+                return _.map(wall,function(pt,idx){
+                    if(idx==0){
+                        pos = [pt[0],pt[1]];
+                    }else{
+                        pos[0] += pt[0];
+                        pos[1] += pt[1];
+                    }
+                    return [pos[0],pos[1]];
+                });
+            })
+
+            //first, set the extents
+            var xAndYs = _.zip.apply(this, _.flatten(absPos));
+
+            xScale = d3.scale.linear()
+                .domain(d3.extent(xAndYs[0]))
+                .range([.05*w,.95*w]);
+
+            yScale = d3.scale.linear()
+                .domain(d3.extent(xAndYs[1]))
+                .range([.05*h,.95*h]);
+
+            svg.selectAll("rect").remove();
+            var rectangle = svg.append("rect")
+                .attr("x", 0)
+                .attr("y", 0)
+                .attr("width", w)
+                .attr("height", h)
+                .attr("fill","#D0CD94")
+                .on('click', function(d,i){
+                    //check to see if anything happened then
+                  var pos = d3.mouse(this);
+                  var loc = [xScale.invert(pos[0]),yScale.invert(pos[1])];
+                  scope.calibPoint(loc)
+            });
 
             svg.selectAll("path").remove();
             _.each(event.mapData.walls,function(wall){

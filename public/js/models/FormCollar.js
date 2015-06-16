@@ -23,8 +23,13 @@ app.service('FormCollar', function($q,$timeout, Globals) {
     
 
     this.ping = function(delay){
+        
         console.log('ping devices...');
         var deferred = $q.defer();
+        if(window.cordova == undefined){
+           deferred.reject('Scan failed');
+           return deferred.promise;
+        }
         evothings.easyble.stopScan();
         evothings.easyble.reportDeviceOnce(false);
         var devices = {}; //mac:[name,rssi]

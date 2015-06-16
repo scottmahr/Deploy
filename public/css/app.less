@@ -75,10 +75,17 @@ h2{
     }
 }
 
+.eventName{
+    position: absolute;
+    top:10vh;left:0;right:0;
+    font-size: 2vh;
+    font-weight: 800;
+    color: @navy;
+}
 
 .currentUser{ 
     position: absolute;
-    top:10vh;left:0;right:0;
+    top:12vh;left:0;right:0;
     height:40vh;
     text-align: center;
     >.cUserName{ 
@@ -100,7 +107,7 @@ h2{
 
 .userList{ 
     position: absolute;
-    top:50vh;left:5vw;right:0;
+    top:52vh;left:5vw;right:0;
     height:15vh;
     text-align: left;
     >.users{
@@ -115,6 +122,13 @@ h2{
         >.userTime{
             font-size: 4vh;
             color: @green;
+        &.red{
+            color: @red;
+        }
+        &.orange{
+            color: @orange;
+        }
+
         }
         >.userMac{
             font-size: 2vh;
@@ -125,7 +139,7 @@ h2{
 
 .beaconList{ 
     position: absolute;
-    top:69vh;left:5vw;right:0;
+    top:71vh;left:5vw;right:0;
     height:30vh;
     text-align: left;
     >.users{
@@ -148,13 +162,17 @@ h2{
 
 .buttons{
     position: absolute;
-    bottom:2vh;left:0;right:0;
+    bottom:1vh;left:0;right:0;
     >.button{
         display: inline-block;
         text-align: center ;
-        margin: 1vw;
-        padding: 3vw 3vw;
+        margin: 4px;
+        padding: 2vw 2vw;
         cursor: pointer;
+        &.outline{
+            margin: 0;
+            border: 4px solid white;
+        }
         &.orange{
             background-color: @orange;
         }

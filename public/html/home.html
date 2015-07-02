@@ -39,10 +39,12 @@
     <div class="button orange" ng-click='startPing()' ng-class="{outline:m.pingOn}">PING</div>
     <div class="button blue" ng-click='changeEvent()'>CHANGE EVENT</div>
     <div class="button blue" ng-click='changeUser()'>CHANGE USER</div>
-    <div class="button red" ng-click="addIcon('f')" ng-class="{outline:m.addIcon=='f'}">
+    <div class="button" ng-click="addTask(0)" ng-class="{outline:m.addTask==0}" 
+        style="background-color:{{m.userList[m.tasks[0][1]].color}}">
       ADD <span class="icon-trash-bin"></span>
     </div>
-    <div class="button green" ng-click="addIcon('g')" ng-class="{outline:m.addIcon=='g'}">
+    <div class="button" ng-click="addTask(1)" ng-class="{outline:m.addTask==1}"
+        style="background-color:{{m.userList[m.tasks[1][1]].color}}">
       ADD <span class="icon-glass"></span>
     </div>
     <div class="button orange" ng-click='clearTasks()'>CLEAR TASKS</div>

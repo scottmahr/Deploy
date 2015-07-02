@@ -16,6 +16,7 @@ app.directive('deploymap',  function($window) {
         var xScale;
 
         var yScale; 
+        var myRect;
 
 
 
@@ -86,7 +87,7 @@ app.directive('deploymap',  function($window) {
                 .range([.05*h,.95*h]);
 
             svg.selectAll("rect").remove();
-            var rectangle = svg.append("rect")
+            myRect = svg.append("rect")
                 .attr("x", 0)
                 .attr("y", 0)
                 .attr("width", w)
@@ -97,7 +98,7 @@ app.directive('deploymap',  function($window) {
                   var pos = d3.mouse(this);
                   var loc = [xScale.invert(pos[0]),yScale.invert(pos[1])];
                   scope.calibPoint(loc)
-            });
+                });
 
             svg.selectAll("path").remove();
             _.each(event.mapData.walls,function(wall){
@@ -117,22 +118,29 @@ app.directive('deploymap',  function($window) {
                 svg.append("circle")
                 .attr("cx", xScale(calib.x))
                 .attr("cy", yScale(calib.y))
-                .attr("r", 1)
+                .attr("r", 2)
                 .attr("fill","#ff9f1c");
             });
 
             svg.selectAll("text").remove();
             _.each(event.taskData,function(task){
+                 var color = _.findWhere(scope.m.userList,{'_id':task.userID}).color;
+
                  svg.append('text')
                     .attr('text-anchor', 'middle')
                     .attr('dominant-baseline', 'central')
                     .attr('font-family', 'deploy')
                     .attr('font-size', '20px')
-                    .attr('stroke', '#e71d36')
-                    .attr('fill', '#e71d36')
+                    .attr('stroke', color)//'#e71d36'
+                    .attr('fill', color)
                     .attr("transform", "translate("+xScale(task.x)+","+yScale(task.y)+")")
 
-                    .text(function(d) { return task.icon; });
+                    .text(function(d) { return task.icon; })
+                    .on('click', function(d,i){
+                        var pos = d3.mouse(myRect.node());
+                        var loc = [xScale.invert(pos[0]),yScale.invert(pos[1])];
+                        scope.removeTask(loc)
+                    });
 
             });
 

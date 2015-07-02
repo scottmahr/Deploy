@@ -8,20 +8,55 @@ app.controller('HomeCtrl', function ($scope,$interval,$timeout,$location,Restang
         eventList :[],
         cEventIdx:0,
         cTime:0,
-        addIcon:'',
+        addTask:-1,
         pingOn: false,
+        tasks: [['f',0],['g',0]]
+
     };
     $scope.d = BTData;
     $scope.usersBase = Restangular.all('users');
     $scope.eventsBase = Restangular.all('events');
+    this.cancelTask;
+
+
+    $scope.removeTask = function(pos){
+        //we need to remove any task that is close to pos, and has the correct user
+        var userID = $scope.m.userList[$scope.m.cUserIdx]._id;
+        var eIdx = $scope.m.cEventIdx
+        console.log(pos)
+        $scope.m.eventList[eIdx].taskData = _.filter($scope.m.eventList[eIdx].taskData, function(task){
+            if(task.userID != userID){return true;}
+            //console.log(task.x,task.y)
+            var dist = Math.sqrt(Math.pow(task.x-pos[0],2)+Math.pow(task.y-pos[1],2));
+            //console.log('dist'+dist)
+            if(dist<.5){
+                console.log('removed task')
+                return false; 
+            }else{
+                return true;
+            }
+            
+        });
+
+        
+        $scope.m.eventList[eIdx].put().then(function(){console.log('saved')});
+        $scope.$broadcast('update', {} );
+    }
+
 
     $scope.calibPoint = function(pos){
+        console.log(pos)
         //first, check if we need to add an icon
-        if($scope.m.addIcon!=''){
-            $scope.m.eventList[$scope.m.cEventIdx].taskData.push({x:pos[0],y:pos[1],icon:$scope.m.addIcon});
+        if($scope.m.addTask!=-1){
+            var userIndex = $scope.m.tasks[$scope.m.addTask][1];
+            var userID = $scope.m.userList[userIndex]._id;
+            //console.log($scope.m.userList[userIndex].name)
+            $scope.m.eventList[$scope.m.cEventIdx].taskData.push({x:pos[0],y:pos[1],
+                icon:$scope.m.tasks[$scope.m.addTask][0],userID:userID});
             $scope.m.eventList[$scope.m.cEventIdx].put().then(function(){console.log('saved')});
             $scope.$broadcast('update', {} );
-            $scope.m.addIcon='';
+            $scope.m.addTask=-1;
+            $timeout.cancel( this.cancelTask );
             return;
         }
 
@@ -90,14 +125,22 @@ app.controller('HomeCtrl', function ($scope,$interval,$timeout,$location,Restang
         
     }
 
-    $scope.addIcon = function(c){
-        if($scope.m.addIcon!=c){
-            $scope.m.addIcon= c;
+    $scope.addTask = function(c){
+        if($scope.m.addTask!=c){
+            $scope.m.addTask= c;
         }else{
-            $scope.m.addIcon='';
+            //change the user
+            $scope.m.tasks[c][1] = ($scope.m.tasks[c][1]+1)% $scope.m.userList.length;
+            //$scope.m.addTask=-1;
         }
+
+        $timeout.cancel( this.cancelTask );
+        this.cancelTask = $timeout(function() {
+            $scope.m.addTask=-1;
+        }, 5000);
         
     }
+
 
     $scope.startPing = function(){
         if($scope.m.pingOn){
@@ -105,6 +148,7 @@ app.controller('HomeCtrl', function ($scope,$interval,$timeout,$location,Restang
         }else{
             $scope.m.pingOn=true;
         }
+
         
     }
 
@@ -113,51 +157,56 @@ app.controller('HomeCtrl', function ($scope,$interval,$timeout,$location,Restang
            return;
         }
 
-        BTData.devices = {};
+        //BTData.devices = {};
         var location = [];
-        FormCollar.ping(2000).then(
+        FormCollar.ping(4000).then(
             function(devices){
-                console.log('got ping');
+                //console.log('got ping');
                 BTData.devices = devices;
                 //now, go through the readings and see what has the most error
                 var closest;
                 var closestErr = 1000000;
-                var temp;
-                console.log('here now')
+                var temp,terr;
+                //console.log('here now')
                 _.each($scope.m.eventList[$scope.m.cEventIdx].calibData,function(calib){
-                    console.log('checking point')
+                    //console.log('checking point')
                     var totalErr = _.reduce(calib.readings,function(err, reading){
                         temp = devices[reading[0]];
                         if(temp==undefined){temp ={rssi:-126};}
-                        console.log('ping:'+temp.rssi)
-                        console.log('calib:'+reading[1])
-                        return err +Math.abs(reading[1]-temp.rssi)
+                        //console.log('ping:'+temp.rssi)
+                        //console.log('calib:'+reading[1])
+                        return err +Math.abs(reading[1]-temp.rssi)/Math.abs(temp.rssi)
                     },0);
+
+
+
                     console.log('total error'+totalErr)
                     if(totalErr<closestErr){
                         location = [calib.x,calib.y];
                         closestErr = totalErr;
-                        console.log('new best',location)
+                        //console.log('new best',location)
                     }
 //
                 });
-                console.log('ready to save')
+                //console.log('ready to save')
                 //now, save to the server
                 var eventID = $scope.m.eventList[$scope.m.cEventIdx]._id;
                 console.log(eventID)
                 if(!_.has($scope.m.userList[$scope.m.cUserIdx],'positions')){
                     $scope.m.userList[$scope.m.cUserIdx]['positions'] = {};
                 }
-                console.log('here')
+                //console.log('here')
                 $scope.m.userList[$scope.m.cUserIdx].positions[eventID] = [(new Date()).getTime(),location[0],location[1]];
 
                 console.log(JSON.stringify( $scope.m.userList[$scope.m.cUserIdx]))
-                $scope.m.userList[$scope.m.cUserIdx].put().then(function(){console.log('saved ping')});
+                $scope.m.userList[$scope.m.cUserIdx].put().then(function(){
+                    //console.log('saved ping')
+                });
 
 
                 $scope.$broadcast('update', {} );
              },function(msg){
-                console.log('failed ping:'+msg);  
+                //console.log('failed ping:'+msg);  
             }
         );
     }
@@ -207,7 +256,7 @@ app.controller('HomeCtrl', function ($scope,$interval,$timeout,$location,Restang
     this.heartBeat2 = $interval(function() {
         $scope.loadData();
         if($scope.m.pingOn){$scope.ping();}
-    }, 2500);
+    }, 4500);
 
 
 });

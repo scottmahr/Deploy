@@ -61,7 +61,7 @@ var eventSchema = new mongoose.Schema({
     mapData: { type: mongoose.Schema.Types.Mixed , default: {} },  //will include walls, other things
     calibData: { type: mongoose.Schema.Types.Mixed , default: [] }, //{x,y,readings:[mac,rssi]}
     beaconData: { type: mongoose.Schema.Types.Mixed , default: [] }, //list of all beacons at event [uuid,x,y,description]
-    taskData: { type: mongoose.Schema.Types.Mixed , default: [] },  //list of all tasks at event [type,x,y] things like trash, other things shown on map
+    taskData: { type: mongoose.Schema.Types.Mixed , default: [] },  //list of all tasks at event [type,x,y,userID] things like trash, other things shown on map
 }, { versionKey: false });
 
 

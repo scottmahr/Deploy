@@ -40,7 +40,7 @@ app.service('FormCollar', function($q,$timeout, Globals) {
                 // Connect if we have found a sensor tag.
                 //console.log(JSON.stringify(device));
                 if ((device != null) && (device.name != null) &&
-                       //(device.name.indexOf('Form Collar') > -1) &&
+                     (device.name.indexOf('HMSensor') > -1) &&
                      device.rssi != 127){ // Invalid RSSI value
                     //see if we already have the device, if not, add it
                     if(!_.has(devices,device.address)){
@@ -58,6 +58,7 @@ app.service('FormCollar', function($q,$timeout, Globals) {
                     _.each(_.keys(devices),function(k){
                         devices[k].rssi = parseInt(10*Math.log10(devices[k].rssiTotal/devices[k].count))
                     })
+                    console.log(JSON.stringify(devices));
                     deferred.resolve(devices);
                    
                 }
